@@ -8,11 +8,11 @@ namespace PagueVeloz.Infrastructure.Repositories;
 public class InMemoryAccountRepository : IAccountRepository
 {
     private static readonly ConcurrentDictionary<Guid, Account> _accounts = new();
-    private readonly AccountLockManager _lockManager;
 
-    public InMemoryAccountRepository(AccountLockManager lockManager)
+    // Mantemos a assinatura para compatibilidade com os testes (pode ser injetado),
+    // mas o repositório não adquire locks — quem gerencia a concorrência é o UseCase.
+    public InMemoryAccountRepository(IAccountLockManager _)
     {
-        _lockManager = lockManager;
     }
 
     public async Task<Account?> GetByIdAsync(Guid accountId)
@@ -21,12 +21,12 @@ public class InMemoryAccountRepository : IAccountRepository
         return await Task.FromResult(account);
     }
 
-    public async Task UpdateAsync(Account account)
+    public Task UpdateAsync(Account account)
     {
-        using (await _lockManager.AcquireAsync(account.Id))
-        {
-            _accounts[account.Id] = account;
-        }
+        // Removida a aquisição do lock para evitar deadlock quando o UseCase
+        // já possui o lock da conta. ConcurrentDictionary é thread-safe.
+        _accounts[account.Id] = account;
+        return Task.CompletedTask;
     }
 
     // helper para testes / seed

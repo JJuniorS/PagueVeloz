@@ -22,7 +22,7 @@ public class DebitUseCaseTests
         account.Credit(300);
         accountRepo.Add(account);
 
-        var useCase = new DebitUseCase(accountRepo, operationRepo, eventPublisher);
+        var useCase = new DebitUseCase(accountRepo, operationRepo, eventPublisher, lockManager);
 
         var operationId = Guid.NewGuid();
 

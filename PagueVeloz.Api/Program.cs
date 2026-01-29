@@ -8,12 +8,11 @@ using PagueVeloz.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 #region More Configuration
 
-builder.Services.AddSingleton<AccountLockManager>();
+//builder.Services.AddSingleton<AccountLockManager>();
+builder.Services.AddSingleton<IAccountLockManager, AccountLockManager>();
 
 builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
 builder.Services.AddSingleton<IOperationRepository, InMemoryOperationRepository>();
@@ -22,6 +21,9 @@ builder.Services.AddSingleton<IEventPublisher, InMemoryEventPublisher>();
 builder.Services.AddScoped<DebitUseCase>();
 
 #endregion
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

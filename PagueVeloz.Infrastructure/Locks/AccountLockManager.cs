@@ -1,8 +1,9 @@
 ﻿using System.Collections.Concurrent;
+using PagueVeloz.Application.Interfaces;
 
 namespace PagueVeloz.Infrastructure.Locks;
 
-public class AccountLockManager
+public class AccountLockManager : IAccountLockManager
 {
     private static readonly ConcurrentDictionary<Guid, SemaphoreSlim> _locks = new();
 
@@ -10,7 +11,6 @@ public class AccountLockManager
     {
         var semaphore = _locks.GetOrAdd(accountId, _ => new SemaphoreSlim(1, 1));
         await semaphore.WaitAsync();
-
         return new Releaser(accountId, semaphore);
     }
 
