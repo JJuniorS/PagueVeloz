@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PagueVeloz.Application\PagueVeloz.Application.csproj" />
+    <ProjectReference Include="..\PagueVeloz.Core\PagueVeloz.Core.csproj" />
+  </ItemGroup>
+
+</Project>

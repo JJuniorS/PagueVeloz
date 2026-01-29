@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="PagueVeloz.Api/PagueVeloz.Api.csproj" />
+  <Project Path="PagueVeloz.Application/PagueVeloz.Application.csproj" />
+  <Project Path="PagueVeloz.Core/PagueVeloz.Core.csproj" />
+  <Project Path="PagueVeloz.Infrastructure/PagueVeloz.Infrastructure.csproj" />
 </Solution>
