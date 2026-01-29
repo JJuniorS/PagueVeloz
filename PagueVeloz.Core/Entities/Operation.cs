@@ -1,5 +1,4 @@
 ﻿using PagueVeloz.Core.Enums;
-using System.Buffers;
 
 namespace PagueVeloz.Core.Entities;
 
@@ -15,9 +14,9 @@ public class Operation
 
     protected Operation() { }
 
-    public Operation(Guid accountId, EOperationType type, decimal amount)
+    public Operation(Guid id, Guid accountId, EOperationType type, decimal amount)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         AccountId = accountId;
         Type = type;
         Amount = amount;

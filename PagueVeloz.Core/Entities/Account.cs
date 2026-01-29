@@ -29,13 +29,13 @@ namespace PagueVeloz.Core.Entities
 
         public void Credit(decimal amount)
         {
-            EnsureActive();
+            AccountIsActive();
             Balance += amount;
         }
 
         public void Debit(decimal amount)
         {
-            EnsureActive();
+            AccountIsActive();
 
             if (AvailableAmount() < amount)
                 throw new InvalidOperationException("Insufficient funds.");
@@ -45,7 +45,7 @@ namespace PagueVeloz.Core.Entities
 
         public void Reserve(decimal amount)
         {
-            EnsureActive();
+            AccountIsActive();
 
             if (AvailableAmount() < amount)
                 throw new InvalidOperationException("Insufficient funds to reserve.");
@@ -55,7 +55,7 @@ namespace PagueVeloz.Core.Entities
 
         public void Capture(decimal amount)
         {
-            EnsureActive();
+            AccountIsActive();
 
             if (ReservedBalance < amount)
                 throw new InvalidOperationException("Insufficient reserved balance.");
@@ -72,7 +72,7 @@ namespace PagueVeloz.Core.Entities
             ReservedBalance -= amount;
         }
 
-        private void EnsureActive()
+        private void AccountIsActive()
         {
             if (Status != EAccountStatus.Active)
                 throw new InvalidOperationException("Account is not active.");

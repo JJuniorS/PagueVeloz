@@ -25,6 +25,24 @@ builder.Services.AddScoped<DebitUseCase>();
 
 var app = builder.Build();
 
+#region Seed
+
+using (var scope = app.Services.CreateScope())
+{
+    var accountRepo = scope.ServiceProvider.GetRequiredService<IAccountRepository>();
+
+    var account = new Account(Guid.NewGuid(), creditLimit: 1000);
+    account.Credit(500); // saldo inicial
+
+    if (accountRepo is PagueVeloz.Infrastructure.Repositories.InMemoryAccountRepository repo)
+    {
+        repo.Add(account);
+        Console.WriteLine($"Seed AccountId: {account.Id}");
+    }
+}
+
+#endregion
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
