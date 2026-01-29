@@ -1,8 +1,9 @@
+using PagueVeloz.Application.Interfaces;
 using PagueVeloz.Application.UseCases;
+using PagueVeloz.Core.Entities;
 using PagueVeloz.Infrastructure.Locks;
 using PagueVeloz.Infrastructure.Messaging;
 using PagueVeloz.Infrastructure.Repositories;
-using PagueVeloz.Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
