@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using PagueVeloz.Application.Interfaces;
 using PagueVeloz.Application.UseCases;
 using PagueVeloz.Core.Entities;
@@ -11,12 +13,24 @@ builder.Services.AddControllers();
 
 #region More Configuration
 
-//builder.Services.AddSingleton<AccountLockManager>();
 builder.Services.AddSingleton<IAccountLockManager, AccountLockManager>();
 
 builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
 builder.Services.AddSingleton<IOperationRepository, InMemoryOperationRepository>();
-builder.Services.AddSingleton<IEventPublisher, InMemoryEventPublisher>();
+
+
+#region RabbitMQ or In-Memory Event Publisher
+var rabbitEnabled = builder.Configuration.GetValue<bool>("RabbitMq:Enabled", false);
+if (rabbitEnabled)
+{
+    builder.Services.AddRabbitMq(builder.Configuration);
+}
+else
+{
+    builder.Services.AddSingleton<IEventPublisher, InMemoryEventPublisher>();
+}
+
+#endregion
 
 builder.Services.AddScoped<DebitUseCase>();
 
@@ -48,7 +62,6 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.MapOpenApi();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
