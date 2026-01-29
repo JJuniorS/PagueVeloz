@@ -1,14 +1,47 @@
+using PagueVeloz.Application.Interfaces;
+using PagueVeloz.Application.UseCases;
+using PagueVeloz.Core.Entities;
+using PagueVeloz.Infrastructure.Locks;
+using PagueVeloz.Infrastructure.Messaging;
+using PagueVeloz.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+#region More Configuration
+
+builder.Services.AddSingleton<AccountLockManager>();
+
+builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
+builder.Services.AddSingleton<IOperationRepository, InMemoryOperationRepository>();
+builder.Services.AddSingleton<IEventPublisher, InMemoryEventPublisher>();
+
+builder.Services.AddScoped<DebitUseCase>();
+
+#endregion
+
 var app = builder.Build();
+
+#region Seed
+
+using (var scope = app.Services.CreateScope())
+{
+    var accountRepo = scope.ServiceProvider.GetRequiredService<IAccountRepository>();
+
+    var account = new Account(Guid.NewGuid(), creditLimit: 1000);
+    account.Credit(500); // saldo inicial
+
+    if (accountRepo is PagueVeloz.Infrastructure.Repositories.InMemoryAccountRepository repo)
+    {
+        repo.Add(account);
+        Console.WriteLine($"Seed AccountId: {account.Id}");
+    }
+}
+
+#endregion
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

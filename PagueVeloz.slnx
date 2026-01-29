@@ -1,3 +1,7 @@
 <Solution>
   <Project Path="PagueVeloz.Api/PagueVeloz.Api.csproj" />
+  <Project Path="PagueVeloz.Application/PagueVeloz.Application.csproj" />
+  <Project Path="PagueVeloz.Core/PagueVeloz.Core.csproj" />
+  <Project Path="PagueVeloz.Infrastructure/PagueVeloz.Infrastructure.csproj" />
+  <Project Path="PagueVeloz.Tests/PagueVeloz.Tests.csproj" Id="d51ba0d1-4b15-4e1e-91dd-e2cd9126b643" />
 </Solution>
