@@ -1,0 +1,6 @@
+@PagueVeloz.Api_HostAddress = http://localhost:5103
+
+GET {{PagueVeloz.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
