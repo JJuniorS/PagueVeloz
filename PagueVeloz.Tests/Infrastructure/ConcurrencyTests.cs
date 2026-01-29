@@ -5,6 +5,7 @@ using PagueVeloz.Infrastructure.Locks;
 using PagueVeloz.Infrastructure.Messaging;
 using PagueVeloz.Infrastructure.Repositories;
 using PagueVeloz.Core.Entities;
+using PagueVeloz.Tests.Mocks;
 using Xunit;
 
 namespace PagueVeloz.Tests.Infrastructure;
@@ -19,12 +20,13 @@ public class ConcurrencyTests
         var operationRepo = new InMemoryOperationRepository();
         var eventPublisherBase = new InMemoryEventPublisher();
         var eventPublisher = new OperationEventPublisher(eventPublisherBase);
+        var loggerMock = new OperationLoggerMock();
 
         var account = new Account(Guid.NewGuid(), 0);
         account.Credit(500);
         accountRepo.Add(account);
 
-        var useCase = new DebitUseCase(accountRepo, operationRepo, eventPublisher, lockManager);
+        var useCase = new DebitUseCase(accountRepo, operationRepo, eventPublisher, lockManager, loggerMock);
 
         // Executa 5 tentativas concorrentes; cada tarefa captura InvalidOperationException
         var tasks = Enumerable.Range(0, 5).Select(async i =>

@@ -1,4 +1,5 @@
-﻿using PagueVeloz.Application.DTOs;
+﻿using System.Diagnostics;
+using PagueVeloz.Application.DTOs;
 using PagueVeloz.Application.Events;
 using PagueVeloz.Application.Interfaces;
 using PagueVeloz.Application.Services;
@@ -13,59 +14,80 @@ public class DebitUseCase
     private readonly IOperationRepository _operationRepository;
     private readonly OperationEventPublisher _eventPublisher;
     private readonly IAccountLockManager _lockManager;
+    private readonly IOperationLogger _logger;
 
     public DebitUseCase(
         IAccountRepository accountRepository,
         IOperationRepository operationRepository,
         OperationEventPublisher eventPublisher,
-        IAccountLockManager lockManager)
+        IAccountLockManager lockManager,
+        IOperationLogger logger)
     {
         _accountRepository = accountRepository;
         _operationRepository = operationRepository;
         _eventPublisher = eventPublisher;
         _lockManager = lockManager;
+        _logger = logger;
     }
 
     public async Task ExecuteAsync(DebitRequest request)
     {
-        // Buscar conta (previamente)
-        var account = await _accountRepository.GetByIdAsync(request.AccountId)
-            ?? throw new InvalidOperationException("Account not found.");
+        var stopwatch = Stopwatch.StartNew();
+        _logger.LogOperationStarted(request.AccountId, "Debit", request.Amount);
 
-        // Adquire lock por conta para evitar condições de corrida
-        using (await _lockManager.AcquireAsync(account.Id))
+        try
         {
-            // Idempotência: checar dentro do lock
-            var existingOperation = await _operationRepository.GetByIdAsync(request.OperationId);
-            if (existingOperation is not null)
-                return;
+            // Buscar conta (previamente)
+            var account = await _accountRepository.GetByIdAsync(request.AccountId)
+                ?? throw new InvalidOperationException("Account not found.");
 
-            // Executar regra de negócio (pode lançar se sem saldo)
-            account.Debit(request.Amount);
+            // Adquire lock por conta para evitar condições de corrida
+            using (await _lockManager.AcquireAsync(account.Id))
+            {
+                // Idempotência: checar dentro do lock
+                var existingOperation = await _operationRepository.GetByIdAsync(request.OperationId);
+                if (existingOperation is not null)
+                {
+                    _logger.LogIdempotencyDetected(request.OperationId);
+                    return;
+                }
 
-            // Persistir conta atualizada
-            await _accountRepository.UpdateAsync(account);
+                // Executar regra de negócio (pode lançar se sem saldo)
+                account.Debit(request.Amount);
 
-            // Criar operação usando o OperationId da requisição (garante idempotência)
-            var operation = new Operation(
-                request.OperationId,
-                request.AccountId,
-                EOperationType.Debit,
-                request.Amount
-            );
+                // Persistir conta atualizada
+                await _accountRepository.UpdateAsync(account);
 
-            operation.Complete();
-            await _operationRepository.AddAsync(operation);
+                // Criar operação usando o OperationId da requisição (garante idempotência)
+                var operation = new Operation(
+                    request.OperationId,
+                    request.AccountId,
+                    EOperationType.Debit,
+                    request.Amount
+                );
 
-            // Publicação do evento com retry exponencial (centralizado)
-            var @event = new OperationCreatedEvent(
-                operation.Id,
-                operation.AccountId,
-                operation.Amount,
-                operation.Type.ToString()
-            );
+                operation.Complete();
+                await _operationRepository.AddAsync(operation);
 
-            await _eventPublisher.PublishWithRetryAsync(@event);
+                // Publicação do evento com retry exponencial (centralizado)
+                var @event = new OperationCreatedEvent(
+                    operation.Id,
+                    operation.AccountId,
+                    operation.Amount,
+                    operation.Type.ToString()
+                );
+
+                await _eventPublisher.PublishWithRetryAsync(@event);
+            }
+
+            stopwatch.Stop();
+            _logger.LogOperationCompleted(request.AccountId, "Debit", request.Amount, stopwatch.ElapsedMilliseconds);
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            _logger.LogOperationFailed(request.AccountId, "Debit", ex.Message, stopwatch.ElapsedMilliseconds);
+            throw;
         }
     }
 }

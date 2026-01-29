@@ -16,7 +16,7 @@ public class EdgeCaseTests : UseCaseTestBase
 
     public EdgeCaseTests()
     {
-        _debitUseCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
+        _debitUseCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager, OperationLoggerMock);
         _creditUseCase = new CreditUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
         _reserveUseCase = new ReserveUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
         _captureUseCase = new CaptureUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);

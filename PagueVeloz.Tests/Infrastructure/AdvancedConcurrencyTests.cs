@@ -13,7 +13,7 @@ public class AdvancedConcurrencyTests : UseCaseTestBase
 
     public AdvancedConcurrencyTests()
     {
-        _debitUseCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
+        _debitUseCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager, OperationLoggerMock);
         _creditUseCase = new CreditUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
         _transferUseCase = new TransferUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
     }

@@ -11,7 +11,7 @@ public class DebitUseCaseTests : UseCaseTestBase
 
     public DebitUseCaseTests()
     {
-        _useCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
+        _useCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager, OperationLoggerMock);
     }
 
     [Fact]

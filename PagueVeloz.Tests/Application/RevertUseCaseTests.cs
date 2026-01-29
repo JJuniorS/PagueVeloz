@@ -15,7 +15,7 @@ public class RevertUseCaseTests : UseCaseTestBase
 
     public RevertUseCaseTests()
     {
-        _debitUseCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
+        _debitUseCase = new DebitUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager, OperationLoggerMock);
         _creditUseCase = new CreditUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
         _reserveUseCase = new ReserveUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);
         _revertUseCase = new RevertUseCase(AccountRepository, OperationRepository, EventPublisher, LockManager);

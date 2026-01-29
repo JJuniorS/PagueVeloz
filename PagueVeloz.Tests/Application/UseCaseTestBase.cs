@@ -1,3 +1,4 @@
+using PagueVeloz.Application.Interfaces;
 using PagueVeloz.Application.Services;
 using PagueVeloz.Core.Entities;
 using PagueVeloz.Infrastructure.Locks;
@@ -18,6 +19,7 @@ public abstract class UseCaseTestBase
     protected InMemoryOperationRepository OperationRepository { get; }
     protected EventPublisherMock EventPublisherMock { get; }
     protected OperationEventPublisher EventPublisher { get; }
+    protected OperationLoggerMock OperationLoggerMock { get; }
 
     public UseCaseTestBase()
     {
@@ -26,6 +28,7 @@ public abstract class UseCaseTestBase
         OperationRepository = new InMemoryOperationRepository();
         EventPublisherMock = new EventPublisherMock();
         EventPublisher = new OperationEventPublisher(EventPublisherMock);
+        OperationLoggerMock = new OperationLoggerMock();
     }
 
     protected Account CreateAccountWithBalance(decimal balance, decimal creditLimit = 1000)
