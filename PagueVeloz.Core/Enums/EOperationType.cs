@@ -6,7 +6,9 @@
         Debit = 2,
         Reserve = 3,
         Capture = 4,
-        Refund = 5,
-        Transfer = 6
+        Release = 5,
+        Transfer = 6,
+        Refund = 7
     }
 }
+

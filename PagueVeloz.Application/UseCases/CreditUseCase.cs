@@ -1,4 +1,4 @@
-﻿using PagueVeloz.Application.DTOs;
+using PagueVeloz.Application.DTOs;
 using PagueVeloz.Application.Events;
 using PagueVeloz.Application.Interfaces;
 using PagueVeloz.Application.Services;
@@ -7,14 +7,14 @@ using PagueVeloz.Core.Enums;
 
 namespace PagueVeloz.Application.UseCases;
 
-public class DebitUseCase
+public class CreditUseCase
 {
     private readonly IAccountRepository _accountRepository;
     private readonly IOperationRepository _operationRepository;
     private readonly OperationEventPublisher _eventPublisher;
     private readonly IAccountLockManager _lockManager;
 
-    public DebitUseCase(
+    public CreditUseCase(
         IAccountRepository accountRepository,
         IOperationRepository operationRepository,
         OperationEventPublisher eventPublisher,
@@ -26,38 +26,36 @@ public class DebitUseCase
         _lockManager = lockManager;
     }
 
-    public async Task ExecuteAsync(DebitRequest request)
+    public async Task ExecuteAsync(CreditRequest request)
     {
-        // Buscar conta (previamente)
         var account = await _accountRepository.GetByIdAsync(request.AccountId)
             ?? throw new InvalidOperationException("Account not found.");
 
-        // Adquire lock por conta para evitar condições de corrida
         using (await _lockManager.AcquireAsync(account.Id))
         {
-            // Idempotência: checar dentro do lock
+            // Idempot�ncia
             var existingOperation = await _operationRepository.GetByIdAsync(request.OperationId);
             if (existingOperation is not null)
                 return;
 
-            // Executar regra de negócio (pode lançar se sem saldo)
-            account.Debit(request.Amount);
+            // Executar regra de neg�cio
+            account.Credit(request.Amount);
 
             // Persistir conta atualizada
             await _accountRepository.UpdateAsync(account);
 
-            // Criar operação usando o OperationId da requisição (garante idempotência)
+            // Criar opera��o
             var operation = new Operation(
                 request.OperationId,
                 request.AccountId,
-                EOperationType.Debit,
+                EOperationType.Credit,
                 request.Amount
             );
 
             operation.Complete();
             await _operationRepository.AddAsync(operation);
 
-            // Publicação do evento com retry exponencial (centralizado)
+            // Publica��o do evento com retry exponencial (centralizado)
             var @event = new OperationCreatedEvent(
                 operation.Id,
                 operation.AccountId,

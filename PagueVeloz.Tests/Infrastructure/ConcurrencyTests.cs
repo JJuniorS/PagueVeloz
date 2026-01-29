@@ -1,4 +1,5 @@
 ﻿using PagueVeloz.Application.DTOs;
+using PagueVeloz.Application.Services;
 using PagueVeloz.Application.UseCases;
 using PagueVeloz.Infrastructure.Locks;
 using PagueVeloz.Infrastructure.Messaging;
@@ -16,7 +17,8 @@ public class ConcurrencyTests
         var lockManager = new AccountLockManager();
         var accountRepo = new InMemoryAccountRepository(lockManager);
         var operationRepo = new InMemoryOperationRepository();
-        var eventPublisher = new InMemoryEventPublisher();
+        var eventPublisherBase = new InMemoryEventPublisher();
+        var eventPublisher = new OperationEventPublisher(eventPublisherBase);
 
         var account = new Account(Guid.NewGuid(), 0);
         account.Credit(500);

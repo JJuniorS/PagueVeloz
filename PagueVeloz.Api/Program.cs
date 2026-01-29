@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PagueVeloz.Application.Interfaces;
+using PagueVeloz.Application.Services;
 using PagueVeloz.Application.UseCases;
 using PagueVeloz.Core.Entities;
 using PagueVeloz.Infrastructure.Locks;
@@ -41,7 +42,17 @@ else
 
 #endregion
 
+// Register OperationEventPublisher service
+builder.Services.AddScoped<OperationEventPublisher>();
+
+// Register all Use Cases
 builder.Services.AddScoped<DebitUseCase>();
+builder.Services.AddScoped<CreditUseCase>();
+builder.Services.AddScoped<ReserveUseCase>();
+builder.Services.AddScoped<CaptureUseCase>();
+builder.Services.AddScoped<ReleaseUseCase>();
+builder.Services.AddScoped<TransferUseCase>();
+builder.Services.AddScoped<RevertUseCase>();
 
 #endregion
 
