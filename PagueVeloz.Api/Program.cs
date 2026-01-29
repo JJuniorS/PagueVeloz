@@ -1,12 +1,26 @@
+using PagueVeloz.Application.UseCases;
+using PagueVeloz.Infrastructure.Locks;
+using PagueVeloz.Infrastructure.Messaging;
+using PagueVeloz.Infrastructure.Repositories;
+using PagueVeloz.Application.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region More Configuration
+
+builder.Services.AddSingleton<AccountLockManager>();
+
+builder.Services.AddSingleton<IAccountRepository, InMemoryAccountRepository>();
+builder.Services.AddSingleton<IOperationRepository, InMemoryOperationRepository>();
+builder.Services.AddSingleton<IEventPublisher, InMemoryEventPublisher>();
+
+builder.Services.AddScoped<DebitUseCase>();
+
+#endregion
 
 var app = builder.Build();
 
