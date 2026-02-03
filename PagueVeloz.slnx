@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Docker/">
+    <File Path="docker-compose.yml" />
+  </Folder>
   <Project Path="PagueVeloz.Api/PagueVeloz.Api.csproj" />
   <Project Path="PagueVeloz.Application/PagueVeloz.Application.csproj" />
   <Project Path="PagueVeloz.Core/PagueVeloz.Core.csproj" />

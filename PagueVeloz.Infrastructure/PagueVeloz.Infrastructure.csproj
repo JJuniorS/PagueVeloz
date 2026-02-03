@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PagueVeloz.Application\PagueVeloz.Application.csproj" />
-    <ProjectReference Include="..\PagueVeloz.Core\PagueVeloz.Core.csproj" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Messaging\" />
+    <ProjectReference Include="..\PagueVeloz.Application\PagueVeloz.Application.csproj" />
+    <ProjectReference Include="..\PagueVeloz.Core\PagueVeloz.Core.csproj" />
   </ItemGroup>
 
 </Project>

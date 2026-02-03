@@ -1,4 +1,5 @@
 ﻿using PagueVeloz.Core.Enums;
+using System.Buffers;
 
 namespace PagueVeloz.Core.Entities;
 
@@ -14,6 +15,17 @@ public class Operation
 
     protected Operation() { }
 
+    public Operation(Guid accountId, EOperationType type, decimal amount)
+    {
+        Id = Guid.NewGuid();
+        AccountId = accountId;
+        Type = type;
+        Amount = amount;
+        Status = EOperationStatus.Pending;
+        CreatedAt = DateTime.UtcNow;
+    }
+
+    // Novo construtor que aceita Id (para idempotência / correlacão de request)
     public Operation(Guid id, Guid accountId, EOperationType type, decimal amount)
     {
         Id = id;
