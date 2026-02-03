@@ -66,6 +66,9 @@ try
     // Register Logging Decorator
     builder.Services.AddScoped<LoggingDecorator>();
 
+    // Register Admin query service
+    builder.Services.AddScoped<PagueVeloz.Application.Interfaces.IAdminQueryService, PagueVeloz.Infrastructure.Services.AdminQueryService>();
+
     #region RabbitMQ or In-Memory Event Publisher
     var rabbitEnabled = builder.Configuration.GetValue<bool>("RabbitMq:Enabled", false);
     if (rabbitEnabled)
@@ -234,3 +237,4 @@ finally
 {
     Log.CloseAndFlush();
 }
+
