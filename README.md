@@ -17,6 +17,7 @@ O que foi entregue (resumo para avaliador)
 
 Avisos rápidos
 
+- Após subir a aplicação, acessar localhost:{porta}/swagger para acessar os endpoints.
 - Logs gerados localmente em `PagueVeloz.Api/logs/` (estão no `.gitignore`).
 - Não há segredos hard-coded no código; variáveis sensíveis devem ser configuradas via `appsettings` ou `.env` fora do repositório.
 
@@ -117,18 +118,9 @@ dotnet test
 - Todos os testes unitários e de infraestrutura estão configurados em `PagueVeloz.Tests`.
 - Os testes cobrem idempotência, concorrência (locks), edge-cases e fluxos principais.
 
-9) Verificar dados no PostgreSQL (opcional)
+9) Verificar dados 
 
-```bash
-# acessando container (nome pode variar dependendo do compose)
-docker exec -it pagueveloz-postgres psql -U pagueveloz -d pagueveloz
-
-# exemplo de query
-SELECT id, "Type", "Status", "Amount", "CreatedAt"
-FROM "Operations"
-WHERE "AccountId" = '<ACCOUNT_ID>'
-ORDER BY "CreatedAt" DESC;
-```
+Deixei uma controller "StartController" é um get que retorna os dados necessários para as requisições que desejarem fazer.
 
 10) Ver mensagens no RabbitMQ (opcional)
 
