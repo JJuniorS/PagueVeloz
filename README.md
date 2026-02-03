@@ -17,9 +17,7 @@ O que foi entregue (resumo para avaliador)
 
 Avisos rápidos
 
-- Após subir a aplicação, acessar localhost:{porta}/swagger para acessar os endpoints.
 - Logs gerados localmente em `PagueVeloz.Api/logs/` (estão no `.gitignore`).
-- Não há segredos hard-coded no código; variáveis sensíveis devem ser configuradas via `appsettings` ou `.env` fora do repositório.
 
 Instruções detalhadas para clonagem e teste (passo-a-passo)
 
