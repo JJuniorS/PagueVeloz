@@ -3,6 +3,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PagueVeloz.Api.Extensions;
 using PagueVeloz.Api.Health;
+using System.Reflection;
+using System.IO;
 using PagueVeloz.Api.Logging;
 using PagueVeloz.Api.Metrics;
 using PagueVeloz.Api.Middleware;
@@ -97,7 +99,16 @@ try
     #endregion
 
     builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
+    builder.Services.AddSwaggerGen(options =>
+    {
+        // Include XML comments (from GenerateDocumentationFile) so Swagger shows <summary> and <response> tags
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        if (File.Exists(xmlPath))
+        {
+            options.IncludeXmlComments(xmlPath);
+        }
+    });
 
     var app = builder.Build();
 
