@@ -15,6 +15,11 @@ public class RevertController : ControllerBase
         _useCase = useCase;
     }
 
+    /// <summary>
+    /// Reverte uma operação financeira previamente executada.
+    /// </summary>
+    /// <param name="request">Dados da reversão</param>
+    /// <response code="200">Operação revertida com sucesso</response>
     [HttpPost]
     public async Task<IActionResult> Revert([FromBody] RevertRequest request)
     {

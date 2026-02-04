@@ -38,6 +38,7 @@ cd PagueVeloz
 3) Subir infraestrutura (PostgreSQL + RabbitMQ)
 
 ```bash
+# Garantir que o docker esteja aberto
 # do diret�rio raiz do reposit�rio
 docker compose up -d
 # verificar

@@ -14,6 +14,11 @@ public class StartController : ControllerBase
         _adminService = adminService;
     }
 
+
+    /// <summary>
+    /// Retorna todos os clientes cadastrados (somente para administração).
+    /// </summary>
+    /// <response code="200">Lista de clientes</response>
     [HttpGet("clients")]
     public async Task<IActionResult> GetClients()
     {
@@ -21,6 +26,10 @@ public class StartController : ControllerBase
         return Ok(clients);
     }
 
+    /// <summary>
+    /// Retorna todas as contas existentes (somente para administração).
+    /// </summary>
+    /// <response code="200">Lista de contas</response>
     [HttpGet("accounts")]
     public async Task<IActionResult> GetAccounts()
     {
@@ -28,6 +37,10 @@ public class StartController : ControllerBase
         return Ok(accounts);
     }
 
+    /// <summary>
+    /// Retorna todas as operações registradas (somente para administração).
+    /// </summary>
+    /// <response code="200">Lista de operações</response>
     [HttpGet("operations")]
     public async Task<IActionResult> GetOperations()
     {

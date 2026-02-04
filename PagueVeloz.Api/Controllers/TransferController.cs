@@ -15,6 +15,11 @@ public class TransferController : ControllerBase
         _useCase = useCase;
     }
 
+    /// <summary>
+    /// Realiza uma transferência entre duas contas.
+    /// </summary>
+    /// <param name="request">Dados da transferência</param>
+    /// <response code="200">Transferência processada com sucesso</response>
     [HttpPost]
     public async Task<IActionResult> Transfer([FromBody] TransferRequest request)
     {

@@ -14,6 +14,12 @@ public class HealthController : ControllerBase
         _healthCheck = healthCheck;
     }
 
+
+    /// <summary>
+    /// Retorna o estado de saúde geral da aplicação, incluindo checks dependentes.
+    /// </summary>
+    /// <response code="200">Aplicação saudável</response>
+    /// <response code="503">Aplicação com problemas</response>
     [HttpGet]
     public async Task<IActionResult> GetHealth()
     {
@@ -26,6 +32,11 @@ public class HealthController : ControllerBase
         return StatusCode(statusCode, result);
     }
 
+    /// <summary>
+    /// Verifica se a aplicação está pronta para receber tráfego (readiness).
+    /// </summary>
+    /// <response code="200">Pronto</response>
+    /// <response code="503">Não pronto</response>
     [HttpGet("ready")]
     public async Task<IActionResult> GetReadiness()
     {
@@ -33,6 +44,10 @@ public class HealthController : ControllerBase
         return result.Status == "Healthy" ? Ok() : StatusCode(StatusCodes.Status503ServiceUnavailable);
     }
 
+    /// <summary>
+    /// Indica se a aplicação está viva (liveness).
+    /// </summary>
+    /// <response code="200">Viva</response>
     [HttpGet("alive")]
     public IActionResult GetLiveness()
     {

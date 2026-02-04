@@ -15,6 +15,11 @@ public class CaptureController : ControllerBase
         _useCase = useCase;
     }
 
+    /// <summary>
+    /// Captura um valor previamente reservado (concretiza a cobrança).
+    /// </summary>
+    /// <param name="request">Dados da captura</param>
+    /// <response code="200">Captura processada com sucesso</response>
     [HttpPost]
     public async Task<IActionResult> Capture([FromBody] CaptureRequest request)
     {

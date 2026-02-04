@@ -18,6 +18,10 @@ namespace PagueVeloz.Api.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retorna uma previsão do tempo fictícia para demonstração.
+        /// </summary>
+        /// <response code="200">Previsões retornadas</response>
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {

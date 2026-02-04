@@ -15,6 +15,11 @@ public class ReleaseController : ControllerBase
         _useCase = useCase;
     }
 
+    /// <summary>
+    /// Libera uma reserva de fundos previamente realizada.
+    /// </summary>
+    /// <param name="request">Dados da liberação</param>
+    /// <response code="200">Reserva liberada com sucesso</response>
     [HttpPost]
     public async Task<IActionResult> Release([FromBody] ReleaseRequest request)
     {

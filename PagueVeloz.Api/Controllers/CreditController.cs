@@ -15,6 +15,11 @@ public class CreditController : ControllerBase
         _useCase = useCase;
     }
 
+    /// <summary>
+    /// Processa um crédito na conta do cliente.
+    /// </summary>
+    /// <param name="request">Dados do crédito</param>
+    /// <response code="200">Crédito processado com sucesso</response>
     [HttpPost]
     public async Task<IActionResult> Credit([FromBody] CreditRequest request)
     {

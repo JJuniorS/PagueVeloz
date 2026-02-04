@@ -15,6 +15,11 @@ public class ReserveController : ControllerBase
         _useCase = useCase;
     }
 
+    /// <summary>
+    /// Reserva um valor na conta do cliente, bloqueando-o para futura captura.
+    /// </summary>
+    /// <param name="request">Dados da reserva</param>
+    /// <response code="200">Valor reservado com sucesso</response>
     [HttpPost]
     public async Task<IActionResult> Reserve([FromBody] ReserveRequest request)
     {
