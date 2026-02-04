@@ -1,45 +1,44 @@
-# PagueVeloz — Desafio Técnico (Plataforma Transacional)
+# PagueVeloz ï¿½ Desafio Tï¿½cnico (Plataforma Transacional)
 
 Resumo curto
 
-PagueVeloz é uma plataforma de processamento de operações financeiras escrita em .NET 9, seguindo arquitetura limpa (Core/Application/Infrastructure/API), DDD e com foco em concorrência, resiliência e observabilidade. Este repositório contém a implementação das operações (crédito, débito, reserva, captura, liberação, transferência, estorno), testes extensivos e infraestrutura mínima (PostgreSQL + RabbitMQ via Docker Compose).
+PagueVeloz ï¿½ uma plataforma de processamento de operaï¿½ï¿½es financeiras escrita em .NET 9, seguindo arquitetura limpa (Core/Application/Infrastructure/API), DDD e com foco em concorrï¿½ncia, resiliï¿½ncia e observabilidade. Este repositï¿½rio contï¿½m a implementaï¿½ï¿½o das operaï¿½ï¿½es (crï¿½dito, dï¿½bito, reserva, captura, liberaï¿½ï¿½o, transferï¿½ncia, estorno), testes extensivos e infraestrutura mï¿½nima (PostgreSQL + RabbitMQ via Docker Compose).
 
 O que foi entregue (resumo para avaliador)
 
-- Implementação das operações financeiras com regras de negócio no domínio (`PagueVeloz.Core`).
-- Use Cases com idempotência, locks por conta e persistência via EF Core (`PagueVeloz.Application`).
-- Repositórios EF Core e integração com PostgreSQL (`PagueVeloz.Infrastructure`).
-- API REST com endpoints para todas as operações (`PagueVeloz.Api`).
-- Retry exponencial na publicação de eventos (RabbitMQ) e publisher substituível por mock.
-- Observabilidade: Serilog (console + arquivo), middlewares de logging, health checks e métricas simples.
-- Seed robusto para avaliação: vários clientes, múltiplas contas com saldos variados e histórico de operações.
-- Testes: >50 testes unitários/integração incluindo concorrência, idempotência e edge cases (`PagueVeloz.Tests`).
+- Implementaï¿½ï¿½o das operaï¿½ï¿½es financeiras com regras de negï¿½cio no domï¿½nio (`PagueVeloz.Core`).
+- Use Cases com idempotï¿½ncia, locks por conta e persistï¿½ncia via EF Core (`PagueVeloz.Application`).
+- Repositï¿½rios EF Core e integraï¿½ï¿½o com PostgreSQL (`PagueVeloz.Infrastructure`).
+- API REST com endpoints para todas as operaï¿½ï¿½es (`PagueVeloz.Api`).
+- Retry exponencial na publicaï¿½ï¿½o de eventos (RabbitMQ) e publisher substituï¿½vel por mock.
+- Observabilidade: Serilog (console + arquivo), middlewares de logging, health checks e mï¿½tricas simples.
+- Seed robusto para avaliaï¿½ï¿½o: vï¿½rios clientes, mï¿½ltiplas contas com saldos variados e histï¿½rico de operaï¿½ï¿½es.
+- Testes: >50 testes unitï¿½rios/integraï¿½ï¿½o incluindo concorrï¿½ncia, idempotï¿½ncia e edge cases (`PagueVeloz.Tests`).
 
-Avisos rápidos
+Avisos rï¿½pidos
 
-- Logs gerados localmente em `PagueVeloz.Api/logs/` (estão no `.gitignore`).
+- Logs gerados localmente em `PagueVeloz.Api/logs/` (estï¿½o no `.gitignore`).
 
-Instruções detalhadas para clonagem e teste (passo-a-passo)
+Instruï¿½ï¿½es detalhadas para clonagem e teste (passo-a-passo)
 
-1) Requisitos na máquina do avaliador
+1) Requisitos na mï¿½quina do avaliador
 
 - Docker + Docker Compose
 - .NET 9 SDK
 - Git
 - Navegador (para Swagger) e cliente HTTP (curl, httpie ou Postman)
 
-2) Clonar o repositório
+2) Clonar o repositï¿½rio
 
 ```bash
 git clone https://github.com/JJuniorS/PagueVeloz.git
 cd PagueVeloz
-git checkout dev
 ```
 
 3) Subir infraestrutura (PostgreSQL + RabbitMQ)
 
 ```bash
-# do diretório raiz do repositório
+# do diretï¿½rio raiz do repositï¿½rio
 docker compose up -d
 # verificar
 docker ps
@@ -51,25 +50,25 @@ postgres:16-alpine         Up
 rabbitmq:3.11-management  Up
 ```
 
-4) Restaurar dependências (opcional, o `dotnet run` faz restore)
+4) Restaurar dependï¿½ncias (opcional, o `dotnet run` faz restore)
 
 ```bash
 dotnet restore
 ```
 
-5) Executar a aplicação (API)
+5) Executar a aplicaï¿½ï¿½o (API)
 
 ```bash
 dotnet run --project PagueVeloz.Api
 ```
 
-O `Program.cs` aplica migrações automaticamente e executa um seed robusto se o banco estiver vazio. No console você verá a saída do seed contendo `ClientId` e `AccountId` para testes; copie uma `AccountId` para usar com o Swagger ou curl.
+O `Program.cs` aplica migraï¿½ï¿½es automaticamente e executa um seed robusto se o banco estiver vazio. No console vocï¿½ verï¿½ a saï¿½da do seed contendo `ClientId` e `AccountId` para testes; copie uma `AccountId` para usar com o Swagger ou curl.
 
-Exemplo de saída do seed (parcial):
+Exemplo de saï¿½da do seed (parcial):
 
 ```
 ?? SEEDING DATABASE WITH TEST DATA
-Client: João Silva
+Client: Joï¿½o Silva
   AccountId: 1a2b3c4d-...
   Balance: $10000.00
   ...
@@ -79,7 +78,7 @@ Client: João Silva
 6) Acessar Swagger UI
 
 - Abrir: `https://localhost:7173/swagger` (porta pode variar, veja console)
-- Use os endpoints disponíveis para enviar requisições de teste.
+- Use os endpoints disponï¿½veis para enviar requisiï¿½ï¿½es de teste.
 
 7) Exemplos de chamadas (curl)
 
@@ -113,12 +112,12 @@ curl -k -X POST https://localhost:7173/api/transfer \
 dotnet test
 ```
 
-- Todos os testes unitários e de infraestrutura estão configurados em `PagueVeloz.Tests`.
-- Os testes cobrem idempotência, concorrência (locks), edge-cases e fluxos principais.
+- Todos os testes unitï¿½rios e de infraestrutura estï¿½o configurados em `PagueVeloz.Tests`.
+- Os testes cobrem idempotï¿½ncia, concorrï¿½ncia (locks), edge-cases e fluxos principais.
 
 9) Verificar dados 
 
-Deixei uma controller "StartController" é um get que retorna os dados necessários para as requisições que desejarem fazer.
+Deixei uma controller "StartController" ï¿½ um get que retorna os dados necessï¿½rios para as requisiï¿½ï¿½es que desejarem fazer.
 
 10) Ver mensagens no RabbitMQ (opcional)
 
@@ -128,7 +127,7 @@ Deixei uma controller "StartController" é um get que retorna os dados necessário
 O que o avaliador deve procurar
 
 - Endpoints funcionando no Swagger
-- Logs estruturados no console e em `PagueVeloz.Api/logs` mostrando operações e eventos
-- Seed populando múltiplos clientes/contas (facilita teste manual)
+- Logs estruturados no console e em `PagueVeloz.Api/logs` mostrando operaï¿½ï¿½es e eventos
+- Seed populando mï¿½ltiplos clientes/contas (facilita teste manual)
 - Testes passando (`dotnet test`)
-- Publicação de eventos (se RabbitMQ habilitado) com retry em falhas
+- Publicaï¿½ï¿½o de eventos (se RabbitMQ habilitado) com retry em falhas
